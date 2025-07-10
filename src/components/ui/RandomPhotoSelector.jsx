@@ -7,6 +7,11 @@ const RandomPhotoSelector = forwardRef(({ files }, ref) => {
     const [selected, setSelected] = useState(null);
     const timeoutRef = useRef(null);
 
+    const dingSound = new Audio("/sounds/ding.mp3");
+
+    // İstersen varsayılan volume ayarlayabilirsin:
+    dingSound.volume = 0.6;
+
     // Dışarıya tetikleme fonksiyonu ver
     useImperativeHandle(ref, () => ({
         handleStart,
@@ -15,7 +20,7 @@ const RandomPhotoSelector = forwardRef(({ files }, ref) => {
     const handleStart = () => {
         if (files.length === 0 || isRunning) return;
 
-        const randomSteps = Math.floor(Math.random() * 20) + 30; // Örnek: 30–50 arası tur
+        const randomSteps = Math.floor(Math.random() * 20) + 30;
         setIsRunning(true);
         setSelected(null);
         runAnimation(randomSteps);
@@ -28,7 +33,8 @@ const RandomPhotoSelector = forwardRef(({ files }, ref) => {
 
         const animate = () => {
             if (i >= steps) {
-                setSelected(files[finalIndex]); // ✅ Garantili doğru kişi
+                setSelected(files[finalIndex]);
+                dingSound.play();
                 setIsRunning(false);
                 return;
             }
@@ -48,7 +54,7 @@ const RandomPhotoSelector = forwardRef(({ files }, ref) => {
             <div className="flex flex-col items-center gap-6 mt-10">
             
             {/* Fotoğraf Gösterim Çerçevesi */}
-            <div className="w-24 h-24 sm:w-56 sm:h-56 md:w-[40vh] md:h-[40vh] bg-gray-800 border-4 border-gray-600 rounded-xl flex items-center justify-center overflow-hidden shadow-xl">
+            <div className="w-24 h-24 sm:w-56 sm:h-56 md:w-[40vh] md:h-[40vh] bg-gray-800 border-3 border-green-700 rounded-xl flex items-center justify-center overflow-hidden shadow-xl">
                 {files.length > 0 && (
                 <img
                     src={files[currentIndex]?.url}

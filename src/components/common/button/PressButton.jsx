@@ -1,5 +1,5 @@
 
-import { FaBolt } from "react-icons/fa";
+import { FaDice } from "react-icons/fa";
 
 export default function PressButton({ onClick }) {
 
@@ -41,7 +41,7 @@ export default function PressButton({ onClick }) {
                 transform translate-y-[-12%] 
                 transition-all duration-150 ease-in-out
                 group-active:translate-y-0 group-active:shadow-none">
-                <FaBolt className="text-[#f0f0f0]" />
+                <FaDice className="text-[#f0f0f0]" />
             </div>
         </button>
     )
