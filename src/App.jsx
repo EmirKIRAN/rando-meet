@@ -1,34 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useRef } from "react"
+
+import Header from "./layouts/main-layout/Header"
+import PressButton from "./components/common/button/PressButton"
+import LoadImageModal from "./components/ui/LoadImageModal";
+import RandomPhotoSelector from "./components/ui/RandomPhotoSelector";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [openLoadImageModal, setOpenLoadImageModal] = useState(false);
+  const [images, setImages] = useState([]);
+  const selectorRef = useRef();
+
+  const handleExternalStart = () => {
+    if (selectorRef.current && images.length > 0) {
+      selectorRef.current.handleStart(); // 🔥 dışarıdan başlat!
+    } else {
+      setOpenLoadImageModal(true); // 🔥 resim yükleme modalını aç
+    }
+  };
+
+  const handleImageUpload = (uploadedImages) => {
+    setImages(uploadedImages);
+    setOpenLoadImageModal(false);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+        <div className="bg-[#181818] h-screen overflow-y-auto w-full">
+            <Header />
+            <main className="w-full">
+                <div className="flex flex-col items-center justify-center h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] xl:h-[90vh]">
+
+                    { images.length === 0 && (
+                      <>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl text-white mb-8">Rando Meet</h1>
+                        <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-12 animate-pulse">Press the button to start a random meeting!</p>
+                      </>
+                    )}
+
+                    { images.length > 0 && (
+                      <div className="my-12">
+                        <RandomPhotoSelector files={images} ref={selectorRef} />
+                      </div>
+                    )}
+
+                    <PressButton onClick={handleExternalStart} />
+
+                </div>
+
+                {/* LoadImageModal component can be used here */}
+                { openLoadImageModal && (
+                    <LoadImageModal 
+                        open={openLoadImageModal}
+                        setOpen={setOpenLoadImageModal}
+                        onUpload={handleImageUpload}
+                      /> 
+                    )
+                }
+            </main>
+
+        </div>
   )
 }
 
