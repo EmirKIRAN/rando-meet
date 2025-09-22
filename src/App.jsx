@@ -13,7 +13,7 @@ function App() {
 
   const handleExternalStart = () => {
     if (selectorRef.current && images.length > 0) {
-      selectorRef.current.handleStart(); // 🔥 dışarıdan başlat!
+      selectorRef.current.handleToggle(); // 🔥 dışarıdan başlat!
     } else {
       setOpenLoadImageModal(true); // 🔥 resim yükleme modalını aç
     }
