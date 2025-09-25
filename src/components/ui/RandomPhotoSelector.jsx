@@ -15,12 +15,11 @@ const RandomPhotoSelector = forwardRef(({ files }, ref) => {
         if (files.length === 0) return;
 
         if (!isRunning) {
-            // Başlat
             setIsRunning(true);
             setSelected(null);
             intervalRef.current = setInterval(() => {
                 setCurrentIndex((prev) => (prev + 1) % files.length);
-            }, 100); // 100ms = 0.1 saniyede bir değişim
+            }, 100);
         } else {
             // Durdur
             clearInterval(intervalRef.current);

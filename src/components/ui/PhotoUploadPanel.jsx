@@ -4,6 +4,23 @@ import { GoUpload } from "react-icons/go";
 export default function PhotoUploadPanel({ onUpload }) {
     const [files, setFiles] = useState([]);
 
+
+    function secureShuffle(arr) {
+        const a = arr.slice();
+        const n = a.length;
+        const rand = new Uint32Array(1);
+
+        for (let i = n - 1; i > 0; i--) {
+            // rastgele sayı çek
+            window.crypto.getRandomValues(rand);
+            // normalize et: 0..i arası
+            const j = Math.floor(rand[0] / (0xFFFFFFFF + 1) * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+
     const parseFiles = (fileList) => {
         const parsed = [];
 
@@ -25,7 +42,9 @@ export default function PhotoUploadPanel({ onUpload }) {
             });
         }
 
-        return parsed;
+        const shuffled = secureShuffle(parsed);
+
+        return shuffled;
     };
 
     const handleFileChange = (e) => {
